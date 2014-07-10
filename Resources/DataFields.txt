@@ -1,0 +1,198 @@
+using System;
+using System.Collections;
+using System.Linq;
+using System.Text;
+using System.IO;
+
+namespace CprE_310_PageRank
+{
+    class DataFields
+    {
+        public ArrayList sourceList;
+        private string filePath;
+
+        public DataFields(string filePath)
+        {
+            sourceList = new ArrayList();
+            this.filePath = filePath;
+            readFile();
+        }
+
+      
+        private void readFile()
+        {
+            System.IO.StreamReader file = new System.IO.StreamReader(filePath);
+
+            string line;
+            string[] split;
+
+            int src, dest;
+
+            while ((line = file.ReadLine()) != null)
+            {
+                split = line.Split('\t');
+                src = Convert.ToInt32(split[0]);
+                dest = Convert.ToInt32(split[1]);
+
+                bool containsSrc = false;
+                bool containsDest = false;
+                Node srcNode= null, destNode = null;
+
+                foreach (Node n in sourceList)
+                {
+                    if (n.Tag == src)
+                    {
+                        srcNode = n;
+                        containsSrc = true;
+                    }
+                    else if(n.Tag == dest)
+                    {
+                        destNode = n;
+                        containsDest = true;
+                    }
+                    else
+                    {
+                        srcNode = new Node(src,dest);
+                    }
+                }
+
+                if (containsSrc)
+                {
+                    srcNode.DestList.Add(dest);
+                    if (containsDest)
+                    {
+                        destNode.SrcList.Add(srcNode);
+                    }
+                    else
+                    {
+                        destNode = new Node(dest);
+                        destNode.SrcList.Add(srcNode);
+                        sourceList.Add(destNode);
+                    }
+                }
+                else
+                {
+                    srcNode = new Node(src, dest);
+                    sourceList.Add(srcNode);
+                    if (containsDest)
+                    {
+                        destNode.SrcList.Add(srcNode);
+                    }
+                    else
+                    {
+                        destNode = new Node(dest);
+                        destNode.SrcList.Add(srcNode);
+                        sourceList.Add(destNode);
+                    }
+                }
+            }
+            file.Close();
+        }
+    }
+
+
+    class Node
+    {
+        int tag;
+        ArrayList destList;// all elements in this list link to this node
+        ArrayList srcList;//this element links to all elements in this list
+        double pageRankIteration;
+        double lastPageRankIteration;
+        double pageRankMonte;
+        double lastPageRankMonte;
+
+        public Node(int tag)
+        {
+            this.tag = tag;
+            destList = new ArrayList();
+            srcList = new ArrayList();
+            pageRankIteration = lastPageRankIteration = pageRankMonte = lastPageRankMonte = 1;
+        }
+
+        public Node(int tag, int dest)
+        {
+            this.tag = tag;
+            destList = new ArrayList();
+            destList.Add(dest);
+            srcList = new ArrayList();
+            pageRankIteration = lastPageRankIteration = pageRankMonte = lastPageRankMonte = 1;
+        }
+
+        public int Tag
+        {
+            get
+            {
+                return tag;
+            }
+            set
+            {
+                tag = value;
+            }
+        }
+
+        public ArrayList DestList
+        {
+            get
+            {
+                return destList;
+            }
+        }
+
+        public ArrayList SrcList
+        {
+            get
+            {
+                return srcList;
+            }
+        }
+
+        public double LastPageRankIteration
+        {
+            get
+            {
+                return lastPageRankIteration;
+            }
+            set
+            {
+                lastPageRankIteration = value;
+            }
+        }
+
+
+        public double PageRankIteration
+        {
+            get
+            {
+                return pageRankIteration;
+            }
+            set
+            {
+                pageRankIteration = value;
+            }
+        }
+
+        public double LastPageRankMonte
+        {
+            get
+            {
+                return lastPageRankMonte;
+            }
+            set
+            {
+                lastPageRankMonte = value;
+            }
+        }
+
+        public double PageRankMonte
+        {
+            get
+            {
+                return pageRankMonte;
+            }
+            set
+            {
+                pageRankMonte = value;
+            }
+        }
+    }
+}

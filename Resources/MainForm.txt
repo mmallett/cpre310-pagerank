@@ -1,0 +1,105 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using System.IO;
+
+namespace CprE_310_PageRank
+{
+    public partial class MainForm : Form
+    {   
+        public MainForm()
+        {
+            InitializeComponent();
+            
+            lstConsole.Items.Add("CprE 381 PageRank Project. Click the Help tab for detailed instructions");
+
+            GlobalVariables.g_dataRead =GlobalVariables.g_dataSimIter = GlobalVariables.g_dataSimMonte = false;
+        }
+
+        private void picRead_Click(object sender, EventArgs e)
+        {
+            bool error = false;
+
+            openFD.ShowDialog();
+
+            string filePath = openFD.FileName;
+
+            //lblConsole.Text += "\nAttempting to read file: " + filePath;
+            lstConsole.Items.Add("\nAttempting to read file: " + filePath);
+            try
+            {
+                GlobalVariables.g_data = new DataFields(filePath);
+                GlobalVariables.g_dataRead = false;
+            }
+            catch (Exception ex)
+            {
+                error = true;
+                lstConsole.Items.Add("\nThere was a problem with the file: " + filePath + " It was either" +
+                    " not found, or not formatted properly.");
+                /*MessageBox.Show("There was a problem with the file,\n" +
+                    "It was either not found or not formatted properly.\n" +
+                    "Please check the file and try again."
+                    , "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);*/
+            }
+
+            if (!error)
+            {
+                GlobalVariables.g_dataRead = true;
+                lstConsole.Items.Add("\nInput file was read successfully. You may now simulate with this data set.");
+                /*MessageBox.Show("File Read Succesfully, you may now simulate with this data set", 
+                    "File Read Successfully", MessageBoxButtons.OK,MessageBoxIcon.Information);*/
+            }
+            
+        }
+
+        private void picRead_MouseEnter(object sender, EventArgs e)
+        {
+            picRead.Image = CprE_310_PageRank.Properties.Resources.binary_inv;
+        }
+
+        private void picRead_MouseLeave(object sender, EventArgs e)
+        {
+            picRead.Image = CprE_310_PageRank.Properties.Resources.binary;
+        }
+
+        private void picSim_Click(object sender, EventArgs e)
+        {
+            if (GlobalVariables.g_dataRead)
+            {
+                lstConsole.Items.Add("\nRunning Power Iteration Simulation on data set");
+                Simulations.Iteration(GlobalVariables.g_data);
+                GlobalVariables.g_dataSimIter = true;
+                lstConsole.Items.Add("\nPower Iteration Simulation complete. See simulation analysis for details");
+            }
+            else
+            {
+                MessageBox.Show("Input has not been read. Read an input file before simulating.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void picSim_MouseEnter(object sender, EventArgs e)
+        {
+            picSim.Image = CprE_310_PageRank.Properties.Resources.simulate_inv;
+        }
+
+        private void picSim_MouseLeave(object sender, EventArgs e)
+        {
+            picSim.Image = CprE_310_PageRank.Properties.Resources.simulate;
+        }
+
+        private void picGen_MouseEnter(object sender, EventArgs e)
+        {
+            picGen.Image = CprE_310_PageRank.Properties.Resources.generate_inv;
+        }
+
+        private void picGen_MouseLeave(object sender, EventArgs e)
+        {
+            picGen.Image = CprE_310_PageRank.Properties.Resources.generate;
+        }
+    }
+}

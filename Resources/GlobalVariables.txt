@@ -1,0 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace CprE_310_PageRank
+{
+    class GlobalVariables
+    {
+       public static DataFields g_data;
+       public static bool g_dataRead;
+       public static bool g_dataSimIter;
+       public static bool g_dataSimMonte;
+    }
+}

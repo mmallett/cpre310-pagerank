@@ -1,0 +1,27 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using System.IO;
+
+namespace CprE_310_PageRank
+{
+    public partial class TextViewer : Form
+    {
+        StreamReader file;   
+
+        public TextViewer()
+        {
+            InitializeComponent();
+        }
+
+        private void simulationscsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            file = new StreamReader(CprE_310_PageRank.Properties.Resources.ResourceMana
+        }
+    }
+}

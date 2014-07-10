@@ -1,0 +1,66 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace CprE_310_PageRank
+{
+    class Simulations
+    {
+        public const double p = .15; //damping constant declared
+
+
+        public static void Iteration(DataFields data)
+        {
+            bool stop = false;
+            while (!stop)
+            {
+                foreach (Node x in data.sourceList)
+                {
+                    x.LastPageRankIteration = x.PageRankIteration;
+                    double sum = 0;
+                    foreach (Node y in x.SrcList)
+                    {
+                        sum += y.PageRankIteration * (1 / y.DestList.Count);
+                    }
+                    x.PageRankIteration = (1 - p) + p * sum;
+                    if (Math.Abs(x.PageRankIteration - x.LastPageRankIteration) < .001)
+                    {
+                        stop = true;
+                    }
+                }
+
+            }
+        }
+
+        public static void MonteCarlo(DataFields data)
+        {
+            Random r = new Random(); //generates 'psuedorandom' values for Monte Carlo simulation
+
+            // want to get smaller range on random numbers to achieve faster simulation
+            int max = 0;
+            foreach (Node n in data.sourceList)
+            {
+                if (n.Tag > max)
+                {
+                    max = n.Tag;
+                }
+            } //this one run through the list will save time in the long run, by limiting random range to inside the graph
+
+            bool stop = false;
+
+            while (!stop)
+            {
+                int rand = r.Next(max);
+                if (data.sourceList.Contains(rand))
+                {
+                    //dont think i have to do this
+                    //it looks like a supermassive pain in the ass
+                    //thank god
+                }
+            }
+
+
+        }
+    }
+}
